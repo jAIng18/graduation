@@ -22,247 +22,530 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--ink); color: var(--cream); overscroll-behavior: none; }
   body { font-family: "Be Vietnam Pro", system-ui, sans-serif; font-weight: 300; font-size: 15px; line-height: 1.6; }
-  main { max-width: 600px; margin: 0 auto; padding: 40px 16px 64px; }
+  main { max-width: 640px; margin: 0 auto; padding: 40px 16px 64px; }
   h1 { font-family: "Lora", Georgia, serif; font-weight: 600; font-size: 28px; margin: 0 0 4px; color: #ffd3a3; }
   .sub { color: var(--soft); margin: 0 0 20px; font-size: 14px; }
-  label { display: block; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin: 18px 0 6px; }
+  label { display: block; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); margin: 14px 0 6px; }
   input, select, textarea {
-    width: 100%; font: inherit; font-weight: 400; color: var(--cream); background: var(--panel);
+    width: 100%; font: inherit; font-weight: 400; color: var(--cream); background: var(--ink);
     border: 1px solid var(--hair); border-radius: 10px; padding: 10px 12px;
   }
-  textarea { min-height: 150px; resize: vertical; line-height: 1.6; }
+  textarea { min-height: 110px; resize: vertical; line-height: 1.6; }
   input:focus, select:focus, textarea:focus { outline: none; border-color: var(--warm); }
   .hint { font-size: 12px; color: var(--soft); margin-top: 4px; }
-  .hint code, .steps code { color: var(--warm); }
+  .hint code, .steps code, .sub code { color: var(--warm); }
   .warn { color: var(--bad); }
   button, .btn {
     font: inherit; font-weight: 600; font-size: 14px; border-radius: 999px; padding: 8px 18px; cursor: pointer;
     border: 1px solid var(--warm); text-decoration: none; text-align: center; display: inline-block;
   }
+  button:disabled { opacity: .5; cursor: default; }
   .primary { background: var(--warm); color: var(--ink); }
   .ghost { background: none; color: var(--warm); }
-  .make { margin-top: 24px; width: 100%; padding: 12px; font-size: 16px; }
+  .small { padding: 4px 12px; font-size: 12px; }
+  .danger { border-color: var(--bad); color: var(--bad); }
 
-  #result { display: none; margin-top: 28px; }
-  #result.on { display: block; }
+  .tabs { display: flex; gap: 8px; margin: 0 0 20px; border-bottom: 1px solid var(--hair); }
+  .tabs button { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; color: var(--soft); padding: 8px 4px; margin-right: 16px; }
+  .tabs button.on { color: #ffd3a3; border-bottom-color: var(--warm); }
+  .tab { display: none; }
+  .tab.on { display: block; }
+
+  .card { border: 1px solid var(--hair); border-radius: 12px; background: var(--panel); padding: 14px; margin-bottom: 12px; }
+  .card label:first-child { margin-top: 0; }
+  .preview { margin-top: 10px; padding: 10px 12px; border-left: 2px solid var(--warm); color: var(--soft); font-size: 14px; white-space: pre-line; }
+  .preview b { color: var(--cream); font-weight: 400; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .code { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 13px; color: var(--soft); }
+  .code input { width: auto; flex: 1; min-width: 0; padding: 4px 8px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+  .row input, .row select { width: auto; flex: 1; min-width: 140px; }
+  .status { font-size: 13px; }
+  .status.good { color: var(--good); }
+  .status.bad { color: var(--bad); }
+  .custom { display: none; }
+  .custom.on { display: block; }
+
+  h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); font-weight: 400; margin: 32px 0 8px; }
   .steps { list-style: none; counter-reset: s; padding: 0; margin: 0; }
   .steps > li { counter-increment: s; position: relative; padding: 14px 14px 14px 52px; margin-bottom: 12px;
                 border: 1px solid var(--hair); border-radius: 10px; background: var(--panel); }
   .steps > li::before { content: counter(s); position: absolute; left: 14px; top: 14px; width: 26px; height: 26px; border-radius: 50%;
                         background: var(--warm); color: var(--ink); font-weight: 600; font-size: 13px; display: grid; place-items: center; }
   .steps b { font-weight: 600; color: #ffd3a3; }
-  .mono { font-family: ui-monospace, Menlo, monospace; font-size: 12px; word-break: break-all; color: var(--soft);
-          background: var(--ink); border-radius: 6px; padding: 8px; margin: 8px 0; max-height: 5.4em; overflow: hidden; }
-  .link { color: var(--cream); font-size: 14px; }
-  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; }
-  .status { font-size: 13px; }
-  .status.good { color: var(--good); }
-  .status.bad { color: var(--bad); }
-
-  h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); font-weight: 400; margin: 36px 0 8px; }
-  ul.hist { list-style: none; padding: 0; margin: 0; }
-  ul.hist li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(235, 165, 108, .1); font-size: 14px; }
-  ul.hist small { color: var(--soft); }
-  ul.hist .acts { display: flex; gap: 6px; flex: none; }
-  ul.hist button { padding: 4px 12px; font-size: 12px; }
+  .mono { font-family: ui-monospace, Menlo, monospace; font-size: 12px; word-break: break-all; white-space: pre-wrap; color: var(--soft);
+          background: var(--ink); border-radius: 6px; padding: 8px; margin: 8px 0; max-height: 9em; overflow: auto; }
+  .banner { border: 1px solid var(--bad); color: var(--bad); border-radius: 10px; padding: 8px 12px; font-size: 13px; margin-bottom: 12px; display: none; }
+  .banner.on { display: block; }
   .empty { color: var(--soft); font-size: 13px; }
+  @media (max-width: 480px) { .two { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <main>
   <h1>Tạo link mời</h1>
-  <p class="sub">Chỉ dành cho Tùng. Viết tên và lời nhắn, tạo link, thêm 1 dòng vào guests.txt trên GitHub, rồi gửi link.</p>
+  <p class="sub">Chỉ dành cho Tùng. Viết <b>nội dung</b> một lần, thêm <b>khách mời</b>, tạo <code>guests.txt</code> và dán lên GitHub một lần, rồi gửi link.</p>
+  <p class="banner" id="noSave">Trình duyệt này không lưu được dữ liệu (chế độ ẩn danh?). Hãy dùng cửa sổ thường, nếu không danh sách sẽ mất khi đóng trang.</p>
 
-  <label for="name">Tên khách</label>
-  <input id="name" placeholder="vd: Đức, cô Hai, thầy Nam" maxlength="40" autocomplete="off">
-  <div class="hint">Hiện ở màn hình terminal và thay cho <code>{n}</code> bên dưới.</div>
+  <nav class="tabs">
+    <button data-tab="content">Nội dung</button>
+    <button data-tab="guests">Khách mời <span id="count"></span></button>
+  </nav>
 
-  <label for="slug">Mã trong link</label>
-  <input id="slug" maxlength="24" autocomplete="off" spellcheck="false">
-  <div class="hint" id="slugHint">Tự tạo từ tên. Chỉ a-z và 0-9. Link sẽ là <code>…/graduation/?to=<span id="slugEx">ma</span>-xxxxxxxx</code></div>
+  <!-- ===== Tab 1: message templates ===== -->
+  <section class="tab" id="tab-content">
+    <p class="hint">Mỗi mẫu là một kiểu lời mời (bạn bè, gia đình…). <code>{n}</code> = tên khách. Sửa mẫu xong, nhớ vào tab Khách mời để tạo lại <code>guests.txt</code>.</p>
+    <div id="tpls"></div>
+    <button class="ghost" id="addTpl">+ Thêm mẫu</button>
+  </section>
 
-  <label for="preset">Mẫu (chọn để điền sẵn, rồi sửa tuỳ ý)</label>
-  <select id="preset">
-    <option value="friend">Bạn bè</option>
-    <option value="family">Gia đình</option>
-    <option value="teacher">Thầy cô</option>
-    <option value="work">Đồng nghiệp</option>
-  </select>
+  <!-- ===== Tab 2: guest list ===== -->
+  <section class="tab" id="tab-guests">
+    <p class="banner" id="dirty">Có thay đổi chưa đưa lên GitHub. Làm lại bước 1–3 bên dưới.</p>
 
-  <label for="dear">Lời chào</label>
-  <input id="dear" maxlength="120" autocomplete="off">
+    <div class="card">
+      <label for="oneName">Thêm khách</label>
+      <div class="row" style="margin-top:0">
+        <input id="oneName" placeholder="vd: Đức, cô Hai, thầy Nam" maxlength="40" autocomplete="off">
+        <select id="addTplSel"></select>
+        <button class="primary" id="addOne">Thêm</button>
+      </div>
+      <div class="row"><button class="ghost small" id="toggleMany">Dán nhiều tên một lúc</button></div>
+      <div class="custom" id="many">
+        <label for="manyNames">Mỗi dòng một tên (dùng mẫu đã chọn ở trên)</label>
+        <textarea id="manyNames" placeholder="Đức&#10;cô Hai&#10;thầy Nam"></textarea>
+        <div class="row"><button class="primary" id="addMany">Thêm tất cả</button></div>
+      </div>
+    </div>
 
-  <label for="msg">Lời nhắn</label>
-  <textarea id="msg" maxlength="1500"></textarea>
-  <div class="hint"><code>{n}</code> = tên khách. Xuống dòng sẽ được giữ nguyên.</div>
+    <h2>Danh sách</h2>
+    <div id="guests"></div>
 
-  <button class="primary make" id="make">Tạo link</button>
-
-  <section id="result">
+    <h2>Đưa lên GitHub và gửi</h2>
     <ol class="steps">
       <li>
-        <b>Copy dòng này</b> (lời nhắn đã được mã hoá)
-        <div class="mono" id="line"></div>
-        <button class="primary" id="copyLine">Copy dòng</button>
+        <b>Tạo file</b> (mã hoá lời mời của tất cả khách)
+        <div class="row"><button class="primary" id="build">Tạo guests.txt</button><span class="status" id="buildStatus"></span></div>
+        <div class="mono" id="file" hidden></div>
+        <div class="row" id="copyFileRow" hidden><button class="primary" id="copyFile">Copy cả file</button></div>
       </li>
       <li>
-        <b>Dán vào guests.txt trên GitHub</b><br>
-        Bấm nút dưới → bấm vào <b>cuối file</b>, xuống một dòng mới → dán (<code>Cmd+V</code>) →
-        bấm nút xanh <b>Commit changes…</b> (góc trên bên phải) → bấm <b>Commit changes</b> lần nữa.
+        <b>Thay cả file guests.txt trên GitHub</b><br>
+        Bấm nút dưới → bấm vào ô nội dung → <code>Cmd+A</code> (chọn hết) → <code>Cmd+V</code> (dán) →
+        nút xanh <b>Commit changes…</b> (góc trên bên phải) → <b>Commit changes</b> lần nữa.
         <div class="row"><a class="btn ghost" href="https://github.com/luongthanhtung03/graduation/edit/main/guests.txt" target="_blank" rel="noopener">Mở guests.txt trên GitHub</a></div>
       </li>
       <li>
         <b>Đợi khoảng 1 phút, rồi kiểm tra</b>
-        <div class="row"><button class="ghost" id="check">Kiểm tra link</button><span class="status" id="status"></span></div>
+        <div class="row"><button class="ghost" id="checkAll">Kiểm tra tất cả link</button><span class="status" id="checkStatus"></span></div>
       </li>
       <li>
-        <b>Copy link và gửi</b>
-        <div class="mono link" id="link"></div>
-        <div class="row">
-          <button class="primary" id="copyLink">Copy link</button>
-          <a class="btn ghost" id="open" target="_blank" rel="noopener">Xem thử</a>
-        </div>
+        <b>Gửi link</b>: copy từng người ở danh sách trên, hoặc copy hết một lần
+        <div class="row"><button class="primary" id="copyAll">Copy tất cả link</button></div>
       </li>
     </ol>
-  </section>
 
-  <h2>Đã tạo (chỉ lưu trên trình duyệt này)</h2>
-  <ul class="hist" id="history"></ul>
+    <h2>Sao lưu</h2>
+    <p class="hint">Danh sách chỉ lưu trên trình duyệt này. File sao lưu chứa mã bí mật của mọi link, hãy giữ riêng, đừng gửi ai.</p>
+    <div class="row">
+      <button class="ghost" id="backup">Tải file sao lưu</button>
+      <label class="btn ghost" style="margin:0;letter-spacing:0;text-transform:none;font-size:14px">Khôi phục từ file<input type="file" id="restore" accept=".json,application/json" hidden></label>
+    </div>
+  </section>
 </main>
 
 <script src="invite-crypto.js"></script>
 <script>
 // Same wording as the default messages in index.html
 const ME = "Tùng";
-const PRESETS = {
-  friend:  { dear: "Gửi {n},",      msg: `Sau 4 năm debug cuộc đời, ${ME} cuối cùng cũng merge được vào nhánh main. Tới chụp hình, chung vui với mình nha!` },
-  family:  { dear: "Kính gửi {n},", msg: `${ME} trân trọng kính mời {n} đến chung vui ngày tốt nghiệp. Có mọi người ở đó là món quà lớn nhất với ${ME}.` },
-  teacher: { dear: "Kính gửi {n},", msg: "Em xin trân trọng kính mời {n} đến dự buổi chụp hình tốt nghiệp của em. Cảm ơn {n} đã dạy dỗ em suốt những năm qua." },
-  work:    { dear: "Gửi {n},",      msg: `${ME} trân trọng mời {n} ghé chung vui ngày tốt nghiệp của ${ME}. Rất mong được gặp {n} ở đó!` },
-};
+const DEFAULT_TEMPLATES = [
+  { id: "friend",  label: "Bạn bè",      dear: "Gửi {n},",      msg: `Sau 4 năm debug cuộc đời, ${ME} cuối cùng cũng merge được vào nhánh main. Tới chụp hình, chung vui với mình nha!` },
+  { id: "family",  label: "Gia đình",    dear: "Kính gửi {n},", msg: `${ME} trân trọng kính mời {n} đến chung vui ngày tốt nghiệp. Có mọi người ở đó là món quà lớn nhất với ${ME}.` },
+  { id: "teacher", label: "Thầy cô",     dear: "Kính gửi {n},", msg: "Em xin trân trọng kính mời {n} đến dự buổi chụp hình tốt nghiệp của em. Cảm ơn {n} đã dạy dỗ em suốt những năm qua." },
+  { id: "work",    label: "Đồng nghiệp", dear: "Gửi {n},",      msg: `${ME} trân trọng mời {n} ghé chung vui ngày tốt nghiệp của ${ME}. Rất mong được gặp {n} ở đó!` },
+];
+const CUSTOM = "custom"; // guest.tpl value for "this guest has their own message"
+const SAMPLE_NAME = "Đức";
+const FILE_HEADER = [
+  "# One guest per line: <code> <encrypted invite>",
+  "# Made by make.html: build the whole file there, then paste it here and replace everything.",
+  "# If a code appears twice, the last line wins.",
+];
 
 const $ = id => document.getElementById(id);
-const nameEl = $("name"), slugEl = $("slug"), presetEl = $("preset"), dearEl = $("dear"), msgEl = $("msg");
 const base = new URL("./", location.href);
+const uid = () => Math.random().toString(36).slice(2, 10);
 
-let slugTouched = false;   // stop auto-filling the code once it was typed by hand
-let editing = null;        // history entry being edited: keeps its secret, so the old link keeps working
-let current = null;        // the invite made by the last "Tạo link"
-let liveGuests = null;     // codes already in the live guests.txt
-
-function fillPreset() {
-  dearEl.value = PRESETS[presetEl.value].dear;
-  msgEl.value = PRESETS[presetEl.value].msg;
+// ===== Saved state (only in this browser) =====
+// { templates: [{id, label, dear, msg}],
+//   guests:    [{id, name, slug, secret, tpl, dear, msg}]   dear/msg only used when tpl === CUSTOM
+//   removed:   [{slug, secret}]   guests deleted (or re-coded) here: "Tạo guests.txt" drops their old line,
+//              but only if it still opens with that secret, so a newer line with the same code is never touched
+//   builtSig:  what the last built file contained, to warn about changes not pushed yet }
+const KEY = "invitePlanner";
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (Array.isArray(s?.templates) && Array.isArray(s?.guests))
+      return { builtSig: "", ...s, removed: (s.removed || []).filter(r => r?.slug && r?.secret) };
+  } catch {}
+  return { templates: structuredClone(DEFAULT_TEMPLATES), guests: migrateOld(), removed: [], builtSig: "" };
+}
+// Invites made by the old one-at-a-time maker keep their secret, so links already sent keep working.
+function migrateOld() {
+  let old = [];
+  try { old = JSON.parse(localStorage.getItem("invites") || "[]"); } catch {}
+  return old.filter(x => x?.slug && x?.secret)
+    .map(x => ({ id: uid(), name: x.n || x.slug, slug: x.slug, secret: x.secret, tpl: CUSTOM, dear: x.d || "", msg: x.m || "" }));
+}
+let state = load();
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(state)); $("noSave").classList.remove("on"); }
+  catch { $("noSave").classList.add("on"); }
 }
 
-function slugInfo() {
-  const slug = slugEl.value;
-  $("slugEx").textContent = slug || "ma";
-  const hint = $("slugHint");
-  hint.classList.remove("warn");
-  if (liveGuests?.has(slug) && editing?.slug !== slug) {
-    hint.classList.add("warn");
-    hint.textContent = `Mã "${slug}" đã có người dùng. Hãy đổi mã khác (vd: ${slug}2), nếu không link cũ của mã này sẽ không mở được nữa.`;
-  } else {
-    hint.innerHTML = `Tự tạo từ tên. Chỉ a-z và 0-9. Link sẽ là <code>…/graduation/?to=<span id="slugEx"></span>-xxxxxxxx</code>`;
-    $("slugEx").textContent = slug || "ma";
-  }
+let liveGuests = null; // Map slug -> encrypted data, from the live guests.txt
+
+const linkOf = g => { const u = new URL(base); u.searchParams.set("to", `${g.slug}-${g.secret}`); return u.toString(); };
+const tplOf = id => state.templates.find(t => t.id === id);
+// What gets encrypted for a guest. {n} stays as is: index.html replaces it when the page opens.
+function contentOf(g) {
+  const t = g.tpl === CUSTOM ? g : tplOf(g.tpl) || { dear: "", msg: "" };
+  return { n: g.name.trim(), d: (t.dear || "").trim(), m: (t.msg || "").trim() };
+}
+const signature = () => JSON.stringify(state.guests.map(g => [g.slug, g.secret, contentOf(g)]));
+
+// A code is taken if another guest here uses it, or if the live file has it (maybe made on another browser):
+// reusing it would break that person's link. "Tạo guests.txt" checks again with a fresh copy of the file.
+function uniqueSlug(wanted, exceptId) {
+  const first = wanted || "khach";
+  const taken = new Set(state.guests.filter(g => g.id !== exceptId).map(g => g.slug));
+  const own = state.guests.find(g => g.id === exceptId)?.slug;
+  for (const s of liveGuests?.keys() || []) if (s !== own) taken.add(s);
+  if (!taken.has(first)) return first;
+  for (let i = 2; ; i++) if (!taken.has(first + i)) return first + i;
 }
 
-nameEl.oninput = () => {
-  if (!slugTouched) slugEl.value = InviteCrypto.slugify(nameEl.value);
-  slugInfo();
-};
-slugEl.oninput = () => {
-  slugTouched = true;
-  slugEl.value = slugEl.value.toLowerCase().replace(/[^a-z0-9]/g, "");
-  slugInfo();
-};
-presetEl.onchange = fillPreset;
-
-$("make").onclick = async () => {
-  const slug = slugEl.value;
-  if (!nameEl.value.trim()) return nameEl.focus();
-  if (!slug) return slugEl.focus();
-  const secret = editing?.slug === slug ? editing.secret : InviteCrypto.newSecret();
-  const invite = { n: nameEl.value.trim(), d: dearEl.value.trim(), m: msgEl.value.trim() };
-  const line = await InviteCrypto.encrypt(slug, secret, invite);
-  const link = new URL(base);
-  link.searchParams.set("to", `${slug}-${secret}`);
-  current = { slug, secret, line, link: link.toString(), ...invite };
-  $("line").textContent = line;
-  $("link").textContent = current.link;
-  $("open").href = current.link;
-  $("status").textContent = "";
-  $("result").classList.add("on");
-  $("result").scrollIntoView({ behavior: "smooth" });
-  saveToHistory(current);
-};
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+const fill = (s, n) => (s || "").replaceAll("{n}", n);
 
 async function copy(text, btn) {
   const old = btn.textContent;
   try { await navigator.clipboard.writeText(text); btn.textContent = "Đã copy ✓"; }
-  catch { btn.textContent = "Không copy được, hãy chọn chữ và bấm Cmd+C"; }
-  setTimeout(() => btn.textContent = old, 1800);
+  catch { btn.textContent = "Không copy được"; }
+  setTimeout(() => btn.textContent = old, 1600);
 }
-$("copyLine").onclick = () => copy(current.line, $("copyLine"));
-$("copyLink").onclick = () => copy(current.link, $("copyLink"));
 
-$("check").onclick = async () => {
-  const st = $("status");
-  st.className = "status"; st.textContent = "Đang kiểm tra…";
+// Two clicks to delete, so a misclick does not lose a guest or a template.
+function confirmButton(label, onConfirm) {
+  const b = el("button", "ghost small danger", label);
+  let armed = false;
+  b.onclick = () => {
+    if (!armed) { armed = true; b.textContent = "Bấm lần nữa để xoá"; setTimeout(() => { armed = false; b.textContent = label; }, 2500); return; }
+    onConfirm();
+  };
+  return b;
+}
+
+function changed() { save(); showDirty(); }
+function showDirty() {
+  $("dirty").classList.toggle("on", state.guests.length > 0 && signature() !== state.builtSig);
+  $("count").textContent = state.guests.length ? `(${state.guests.length})` : "";
+}
+
+// ===== Tabs =====
+function showTab(name) {
+  document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
+  document.querySelectorAll(".tab").forEach(s => s.classList.toggle("on", s.id === "tab-" + name));
+  try { localStorage.setItem("makeTab", name); } catch {}
+  if (name === "content") renderTemplates();
+  if (name === "guests") { fillTplSelect($("addTplSel"), $("addTplSel").value); renderGuests(); }
+}
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+
+// ===== Tab 1: templates =====
+function renderTemplates() {
+  const box = $("tpls");
+  box.replaceChildren();
+  for (const t of state.templates) {
+    const card = el("div", "card");
+    const used = state.guests.filter(g => g.tpl === t.id).length;
+
+    const label = el("input"); label.value = t.label; label.maxLength = 30;
+    const dear = el("input"); dear.value = t.dear; dear.maxLength = 120;
+    const msg = el("textarea"); msg.value = t.msg; msg.maxLength = 1500;
+    const preview = el("div", "preview");
+    const showPreview = () => {
+      preview.replaceChildren(el("b", null, fill(dear.value, SAMPLE_NAME)), document.createTextNode("\n" + fill(msg.value, SAMPLE_NAME)));
+    };
+    label.oninput = () => { t.label = label.value; changed(); };
+    dear.oninput = () => { t.dear = dear.value; showPreview(); changed(); };
+    msg.oninput = () => { t.msg = msg.value; showPreview(); changed(); };
+    showPreview();
+
+    const foot = el("div", "row");
+    foot.append(el("span", "hint", used ? `Đang dùng cho ${used} khách` : "Chưa có khách nào dùng"));
+    if (!used && state.templates.length > 1) foot.append(confirmButton("Xoá mẫu", () => {
+      if (state.guests.some(g => g.tpl === t.id)) return renderTemplates(); // a guest started using it meanwhile
+      state.templates = state.templates.filter(x => x !== t);
+      changed(); renderTemplates();
+    }));
+
+    card.append(el("label", null, "Tên mẫu"), label, el("label", null, "Lời chào"), dear,
+                el("label", null, "Lời nhắn"), msg, el("div", "hint", `Xem trước với tên "${SAMPLE_NAME}":`), preview, foot);
+    box.append(card);
+  }
+}
+$("addTpl").onclick = () => {
+  state.templates.push({ id: uid(), label: "Mẫu mới", dear: "Gửi {n},", msg: "" });
+  changed(); renderTemplates();
+  $("tpls").lastElementChild.querySelector("input").select();
+};
+
+// ===== Tab 2: guests =====
+function fillTplSelect(sel, value, withCustom) {
+  sel.replaceChildren(...state.templates.map(t => { const o = el("option", null, t.label || "(chưa đặt tên)"); o.value = t.id; return o; }));
+  if (withCustom) { const o = el("option", null, "Riêng (tự viết)"); o.value = CUSTOM; sel.append(o); }
+  sel.value = value && [...sel.options].some(o => o.value === value) ? value : sel.options[0]?.value;
+}
+
+function addGuests(names) {
+  const tpl = $("addTplSel").value;
+  if (!tplOf(tpl)) return;
+  for (const raw of names) {
+    const name = raw.trim().slice(0, 40);
+    if (!name) continue;
+    const slug = uniqueSlug(InviteCrypto.slugify(name));
+    state.guests.push({ id: uid(), name, slug, secret: InviteCrypto.newSecret(), tpl, dear: "", msg: "" });
+  }
+  changed(); renderGuests();
+}
+$("addOne").onclick = () => { addGuests([$("oneName").value]); $("oneName").value = ""; $("oneName").focus(); };
+$("oneName").onkeydown = e => { if (e.key === "Enter") $("addOne").click(); };
+$("toggleMany").onclick = () => $("many").classList.toggle("on");
+$("addMany").onclick = () => { addGuests($("manyNames").value.split("\n")); $("manyNames").value = ""; };
+
+const statusEls = new Map(); // guest id -> its status <span>, filled by "Kiểm tra tất cả link"
+
+function renderGuests() {
+  showDirty();
+  statusEls.clear();
+  const box = $("guests");
+  box.replaceChildren();
+  if (!state.guests.length) { box.append(el("p", "empty", "Chưa có khách nào. Thêm tên ở ô phía trên.")); return; }
+  for (const g of state.guests) box.append(guestCard(g));
+}
+
+function guestCard(g) {
+  const card = el("div", "card");
+  const status = el("span", "status");
+  statusEls.set(g.id, status);
+  const edited = () => { status.textContent = ""; changed(); };
+
+  const name = el("input"); name.value = g.name; name.maxLength = 40;
+  name.oninput = () => { g.name = name.value; edited(); };
+  const tpl = el("select");
+  fillTplSelect(tpl, g.tpl, true);
+
+  const custom = el("div", "custom");
+  const dear = el("input"); dear.value = g.dear; dear.maxLength = 120; dear.placeholder = "Lời chào";
+  const msg = el("textarea"); msg.value = g.msg; msg.maxLength = 1500; msg.placeholder = "Lời nhắn riêng, {n} = tên";
+  dear.oninput = () => { g.dear = dear.value; edited(); };
+  msg.oninput = () => { g.msg = msg.value; edited(); };
+  custom.append(el("label", null, "Lời nhắn riêng"), dear, msg);
+  custom.classList.toggle("on", g.tpl === CUSTOM);
+
+  tpl.onchange = () => {
+    // switching to "own message": start from the template it had, so there is something to edit
+    if (tpl.value === CUSTOM && !g.dear && !g.msg) {
+      const from = tplOf(g.tpl);
+      if (from) { g.dear = dear.value = from.dear; g.msg = msg.value = from.msg; }
+    }
+    g.tpl = tpl.value;
+    custom.classList.toggle("on", g.tpl === CUSTOM);
+    edited();
+  };
+
+  // Changing the code changes the link. Fine before it is sent; after that the old link stops working.
+  const codeRow = el("div", "code");
+  const slug = el("input"); slug.value = g.slug; slug.spellcheck = false;
+  slug.oninput = () => { slug.value = slug.value.toLowerCase().replace(/[^a-z0-9]/g, ""); };
+  slug.onchange = () => {
+    const next = uniqueSlug(slug.value || InviteCrypto.slugify(g.name), g.id);
+    if (next !== g.slug && liveGuests?.has(g.slug)
+        && !confirm(`Mã "${g.slug}" đã có trên GitHub. Nếu đã gửi link cho ${g.name.trim() || "khách"}, đổi mã sẽ làm link cũ không mở được nữa. Vẫn đổi?`)) {
+      slug.value = g.slug;
+      return;
+    }
+    if (next !== g.slug) { state.removed.push({ slug: g.slug, secret: g.secret }); g.slug = next; edited(); }
+    slug.value = g.slug;
+    open.href = linkOf(g);
+  };
+  codeRow.append(el("span", null, "?to="), slug, el("span", null, "-" + "•".repeat(8)), status);
+
+  const acts = el("div", "row");
+  const copyBtn = el("button", "primary small", "Copy link");
+  copyBtn.onclick = () => copy(linkOf(g), copyBtn);
+  const open = el("a", "btn ghost small", "Xem thử");
+  open.href = linkOf(g); open.target = "_blank"; open.rel = "noopener";
+  acts.append(copyBtn, open, confirmButton("Xoá", () => {
+    state.guests = state.guests.filter(x => x !== g);
+    state.removed.push({ slug: g.slug, secret: g.secret });
+    changed(); renderGuests();
+  }));
+
+  const top = el("div", "two");
+  top.append(name, tpl);
+  card.append(top, codeRow, custom, acts);
+  return card;
+}
+
+// ===== Build guests.txt =====
+$("build").onclick = async () => {
+  const st = $("buildStatus"), btn = $("build");
+  if (!state.guests.length) { st.className = "status bad"; st.textContent = "Chưa có khách nào."; return; }
+  const noName = state.guests.find(g => !g.name.trim());
+  if (noName) { st.className = "status bad"; st.textContent = `Khách có mã "${noName.slug}" chưa có tên.`; return; }
+
+  btn.disabled = true; st.className = "status";
   try {
-    const got = await InviteCrypto.lookup(current.slug, current.secret);
-    if (got.m !== current.m || got.d !== current.d || got.n !== current.n) throw new Error("old version");
-    st.className = "status good"; st.textContent = `Link đã hoạt động ✓ (${got.n})`;
+    st.textContent = "Đang đọc file trên GitHub…";
+    // Without the live file we cannot know which lines to keep, so never build blind.
+    try { liveGuests = await InviteCrypto.fetchGuests(); }
+    catch { st.className = "status bad"; st.textContent = "Không đọc được guests.txt trên GitHub (mất mạng?). Thử lại sau."; return; }
+
+    // Snapshot: edits made while encrypting do not end up half in the file.
+    const guests = structuredClone(state.guests);
+    const opens = async (slug, secret) => {
+      try { await InviteCrypto.decrypt(slug, secret, liveGuests.get(slug)); return true; } catch { return false; }
+    };
+
+    // A live line with our code that does not open with our secret belongs to someone else's link.
+    const clash = [];
+    for (const g of guests) {
+      if (!liveGuests.has(g.slug)) continue;
+      st.textContent = `Đang kiểm tra mã ${g.slug}…`;
+      if (!(await opens(g.slug, g.secret))) clash.push(g.slug);
+    }
+    if (clash.length) {
+      st.className = "status bad";
+      st.textContent = `Mã ${clash.join(", ")} đã thuộc về link khác trên GitHub. Hãy đổi mã của khách đó rồi tạo lại.`;
+      return;
+    }
+
+    const lines = [...FILE_HEADER];
+    for (const [i, g] of guests.entries()) {
+      st.textContent = `Đang mã hoá ${i + 1}/${guests.length}…`;
+      lines.push(await InviteCrypto.encrypt(g.slug, g.secret, contentOf(g)));
+    }
+    // Other live lines: drop the ones that are our own deleted guests, keep everything else
+    // (made on another browser), so those links keep working.
+    const mine = new Set(guests.map(g => g.slug));
+    const kept = [], dropped = [];
+    for (const [s, data] of liveGuests) {
+      if (mine.has(s)) continue;
+      let ours = false;
+      for (const r of state.removed) if (r.slug === s && await opens(s, r.secret)) ours = true;
+      (ours ? dropped : kept).push([s, data]);
+    }
+    if (kept.length) {
+      lines.push("", "# Kept from the old file: made on another browser, not in the list on make.html");
+      for (const [s, data] of kept) lines.push(`${s} ${data}`);
+    }
+    // A deleted guest is done once their line is gone from GitHub.
+    state.removed = state.removed.filter(r => liveGuests.has(r.slug));
+
+    $("file").textContent = lines.join("\n") + "\n";
+    $("file").hidden = $("copyFileRow").hidden = false;
+    state.builtSig = JSON.stringify(guests.map(g => [g.slug, g.secret, contentOf(g)]));
+    save(); showDirty();
+    st.className = "status good";
+    st.textContent = `Xong: ${guests.length} khách`
+      + (dropped.length ? `, bỏ ${dropped.length} dòng đã xoá (${dropped.map(k => k[0]).join(", ")})` : "")
+      + (kept.length ? `, giữ lại ${kept.length} dòng tạo ở nơi khác (${kept.map(k => k[0]).join(", ")})` : "");
   } catch (err) {
-    st.className = "status bad";
-    st.textContent = err.message === "old version"
-      ? "GitHub vẫn đang có bản cũ. Đợi thêm 1 phút rồi bấm lại."
-      : "Chưa thấy dòng này. Đã Commit chưa? Nếu rồi, đợi thêm 1 phút rồi bấm lại.";
+    st.className = "status bad"; st.textContent = "Lỗi: " + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+};
+$("copyFile").onclick = () => copy($("file").textContent, $("copyFile"));
+
+// ===== Check every link against the live guests.txt =====
+$("checkAll").onclick = async () => {
+  const st = $("checkStatus"), btn = $("checkAll");
+  btn.disabled = true; st.className = "status"; st.textContent = "Đang kiểm tra…";
+  try {
+    liveGuests = await InviteCrypto.fetchGuests();
+    let ok = 0, old = 0, missing = 0;
+    for (const g of state.guests) {
+      const s = statusEls.get(g.id);
+      const data = liveGuests.get(g.slug);
+      let result = "missing";
+      if (data) {
+        try {
+          const got = await InviteCrypto.decrypt(g.slug, g.secret, data);
+          const want = contentOf(g);
+          result = got.n === want.n && got.d === want.d && got.m === want.m ? "ok" : "old";
+        } catch { result = "clash"; } // wrong secret: the line on GitHub is for another link with this code
+      }
+      if (result === "ok") ok++; else if (result === "missing") missing++; else old++;
+      if (s) {
+        s.className = "status " + (result === "ok" ? "good" : "bad");
+        s.textContent = { ok: "✓ hoạt động", old: "bản cũ", clash: "mã trùng link khác", missing: "chưa có trên GitHub" }[result];
+      }
+    }
+    st.className = "status " + (old || missing ? "bad" : "good");
+    st.textContent = `${ok} ✓` + (old ? ` · ${old} bản cũ` : "") + (missing ? ` · ${missing} chưa có` : "")
+      + (old || missing ? ". Đã commit chưa? Nếu rồi, đợi thêm 1 phút rồi bấm lại." : ". Tất cả link đã sẵn sàng!");
+  } catch (err) {
+    st.className = "status bad"; st.textContent = "Không đọc được guests.txt: " + err.message;
+  } finally {
+    btn.disabled = false;
   }
 };
 
-// ===== History (only in this browser) =====
-function loadHistory() { try { return JSON.parse(localStorage.getItem("invites") || "[]"); } catch { return []; } }
-function saveHistory(list) { try { localStorage.setItem("invites", JSON.stringify(list.slice(0, 200))); } catch {} }
-function saveToHistory(item) {
-  saveHistory([item, ...loadHistory().filter(x => x.slug !== item.slug)]);
-  showHistory();
-}
-function showHistory() {
-  const list = loadHistory(), ul = $("history");
-  ul.innerHTML = "";
-  if (!list.length) { ul.innerHTML = `<li class="empty">Chưa có link nào.</li>`; return; }
-  for (const item of list) {
-    const li = document.createElement("li");
-    const who = document.createElement("span");
-    who.textContent = item.n + " ";
-    const code = document.createElement("small");
-    code.textContent = `?to=${item.slug}-…` + (liveGuests && !liveGuests.has(item.slug) ? " · chưa có trên GitHub" : "");
-    who.appendChild(code);
-    const acts = document.createElement("span");
-    acts.className = "acts";
-    const edit = document.createElement("button");
-    edit.className = "ghost"; edit.textContent = "Sửa";
-    edit.onclick = () => {
-      editing = item; slugTouched = true;
-      nameEl.value = item.n; slugEl.value = item.slug; dearEl.value = item.d; msgEl.value = item.m;
-      slugInfo(); scrollTo({ top: 0, behavior: "smooth" });
-    };
-    const again = document.createElement("button");
-    again.className = "ghost"; again.textContent = "Copy link";
-    again.onclick = () => copy(item.link, again);
-    acts.append(edit, again);
-    li.append(who, acts);
-    ul.appendChild(li);
-  }
-}
+$("copyAll").onclick = () => copy(state.guests.map(g => `${g.name.trim()}: ${linkOf(g)}`).join("\n"), $("copyAll"));
 
-fillPreset();
-showHistory();
-InviteCrypto.fetchGuests().then(g => { liveGuests = g; slugInfo(); showHistory(); }).catch(() => {});
-nameEl.focus();
+// ===== Backup / restore =====
+$("backup").onclick = () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const a = el("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `invite-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+$("restore").onchange = async e => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  try {
+    const s = JSON.parse(await file.text());
+    const str = v => typeof v === "string";
+    if (!Array.isArray(s?.templates) || !Array.isArray(s?.guests)
+        || !s.guests.every(g => str(g?.id) && str(g.name) && str(g.slug) && str(g.secret) && str(g.tpl))
+        || !s.templates.every(t => str(t?.id) && str(t.label) && str(t.dear) && str(t.msg))) throw new Error("not a backup file");
+    if (!confirm(`Thay danh sách hiện tại bằng file sao lưu (${s.guests.length} khách)? Khách thêm sau lần sao lưu này sẽ mất khỏi danh sách.`)) return;
+    state = { builtSig: "", ...s, removed: Array.isArray(s.removed) ? s.removed.filter(r => str(r?.slug) && str(r.secret)) : [] };
+    save(); renderTemplates(); showTab("guests");
+  } catch (err) {
+    alert("File không đúng: " + err.message);
+  }
+};
+
+// ===== Start =====
+save();
+renderTemplates();
+let startTab = "guests";
+try { startTab = localStorage.getItem("makeTab") || "guests"; } catch {}
+showTab(startTab === "content" ? "content" : "guests");
+InviteCrypto.fetchGuests().then(g => { liveGuests = g; }).catch(() => {});
 </script>
 </body>
 </html>
