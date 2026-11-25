@@ -8,21 +8,21 @@
 // =====================================================================
 
 // ----- Bạn là ai -----
-const ME = "[Tên]";                    // tên ngắn, dùng trong lời mời. Vd: "Trí"
-const FULL_NAME = "[Họ và tên]";
+const ME = "Giang";                    // tên ngắn, dùng trong lời mời
+const FULL_NAME = "Trần Trường Giang";
 const FB = "https://www.facebook.com/[ten-facebook]"; // để "" thì ẩn mục Liên hệ
 const SCHOOL_SHORT = "HCMUS";          // hiện ở thanh trên cùng
 
 // ----- Khi nào (giờ Việt Nam) -----
 // Thứ, ngày hiển thị, đếm ngược và file lịch (Google Calendar, .ics) đều tự tính từ 3 dòng này.
-const EVENT_DATE = "2026-11-28";       // [đổi] năm-tháng-ngày
-const EVENT_START = "15:30";           // [đổi]
-const EVENT_END = "17:00";             // [đổi]
+const EVENT_DATE = "2026-12-06";       // năm-tháng-ngày
+const EVENT_START = "15:30";
+const EVENT_END = "17:00";
 
 // ----- Ở đâu -----
 // HCMUS có 2 cơ sở: 227 Nguyễn Văn Cừ, Phường 4, Quận 5 và Khu đô thị ĐHQG, Linh Trung, Thủ Đức.
-const MAPS_QUERY = "[Trường Đại học Khoa học Tự nhiên 227 Nguyễn Văn Cừ]"; // gõ vào Google Maps ra đúng chỗ
-const CALENDAR_PLACE = "[Trường ĐH Khoa học Tự nhiên, 227 Nguyễn Văn Cừ, Quận 5]";
+const MAPS_QUERY = "Trường Đại học Khoa học Tự nhiên, 227 Nguyễn Văn Cừ, TP.HCM"; // gõ vào Google Maps ra đúng chỗ
+const CALENDAR_PLACE = "Trường ĐH Khoa học Tự nhiên, 227 Nguyễn Văn Cừ, TP.HCM";
 // Bản đồ khuôn viên (tuỳ chọn): bỏ ảnh vào thư mục rồi ghi tên file, vd "campus-map.jpg". Để "" thì ẩn.
 const MAP_IMAGE = "";
 // Ghim trên bản đồ: left/top = vị trí tính theo % chiều ngang/dọc của ảnh.
@@ -59,13 +59,13 @@ const GREETINGS = {
 const TEXT = {
   vi: {
     showPre: "Thư mời dự", showTitle: "Lễ Tốt Nghiệp",
-    faculty: "[Khoa]",                 // vd: "Khoa Công nghệ Thông tin"
+    faculty: "Khoa Công nghệ Thông tin",
     school: "Trường Đại học Khoa học Tự nhiên, ĐHQG-HCM",
     eyebrow: "Thư mời dự lễ tốt nghiệp",
     title: `Chung vui <em>ngày tốt nghiệp</em> cùng ${ME}`,
     fallback: "bạn",
-    timeNote: "[Ghi chú giờ, để \"\" nếu không cần]", // vd: "Lễ của khoa bắt đầu 14:30, tới 15:30 là vừa đẹp"
-    place: "[Chỗ hẹn]<small>[Cơ sở · địa chỉ]</small>", // vd: "Trước sảnh nhà I<small>Cơ sở Nguyễn Văn Cừ · 227 Nguyễn Văn Cừ, Q.5</small>"
+    timeNote: "",                      // ghi chú nhỏ dưới giờ, vd: "Lễ của khoa bắt đầu 14:30, tới 15:30 là vừa đẹp"
+    place: "[Chỗ hẹn]<small>Cơ sở Nguyễn Văn Cừ · 227 Nguyễn Văn Cừ, TP.HCM</small>", // vd chỗ hẹn: "Trước sảnh nhà I"
     routeL: "Đường đến [chỗ hẹn]",
     gates: [                           // [tên cổng, đường]. Để [] nếu không cần mục này
       ["[Cổng chính]", "[Tên đường]"],
@@ -76,13 +76,13 @@ const TEXT = {
   },
   en: {
     showPre: "You're invited to my", showTitle: "Graduation",
-    faculty: "[Faculty]",              // vd: "Faculty of Information Technology"
+    faculty: "Faculty of Information Technology",
     school: "University of Science, VNU-HCM",
     eyebrow: "Graduation invitation",
     title: `Celebrate <em>graduation day</em> with ${ME}`,
     fallback: "friend",
-    timeNote: "[Time note, or \"\"]",
-    place: "[Meeting point]<small>[Campus · address]</small>",
+    timeNote: "",
+    place: "[Meeting point]<small>Nguyen Van Cu campus · 227 Nguyen Van Cu St, HCMC</small>",
     routeL: "Getting there",
     gates: [
       ["[Main gate]", "[Street]"],
