@@ -10,7 +10,8 @@
 // ----- Bạn là ai -----
 const ME = "Giang";                    // tên ngắn, dùng trong lời mời
 const FULL_NAME = "Trần Trường Giang";
-const FB = "https://www.facebook.com/[ten-facebook]"; // để "" thì ẩn mục Liên hệ
+const FB = "https://www.facebook.com/tran.giang.999946/"; // để "" thì ẩn nút Facebook
+const ZALO = "0822713158";             // số điện thoại Zalo, để "" thì ẩn nút Zalo. Không có cả 2 thì ẩn mục Liên hệ
 const SCHOOL_SHORT = "HCMUS";          // hiện ở thanh trên cùng
 
 // ----- Khi nào (giờ Việt Nam) -----
@@ -70,10 +71,10 @@ const TEXT = {
     routeL: "Đường đến cột cờ",
     pin: "Cột cờ · chỗ hẹn",          // nhãn trên bản đồ
     gates: [                           // [tên cổng, đường]. Để [] nếu không cần mục này
-      ["[Cổng chính]", "[Tên đường]"],
-      ["[Cổng phụ]", "[Tên đường]"],
+      ["Cổng chính", "Đường Nguyễn Văn Cừ, đi bộ vào"],
+      ["Cổng xe máy", "Đường Nguyễn Văn Cừ, bên phải cổng chính"],
     ],
-    tip: "[Vào cổng nào, rồi đi tiếp thế nào để tới chỗ hẹn]",
+    tip: "Vào cổng chính trên đường Nguyễn Văn Cừ, đi thẳng vào sân, cột cờ nằm cuối sân, giữa dãy B và dãy A.",
     sign: `Hẹn gặp bạn nhé! — ${FULL_NAME}`,
   },
   en: {
@@ -88,10 +89,10 @@ const TEXT = {
     routeL: "Getting there",
     pin: "Flagpole · meet here",
     gates: [
-      ["[Main gate]", "[Street]"],
-      ["[Side gate]", "[Street]"],
+      ["Main gate", "Nguyen Van Cu St, walk in"],
+      ["Motorbike gate", "Nguyen Van Cu St, right of the main gate"],
     ],
-    tip: "[Which gate, and how to walk to the meeting point]",
+    tip: "Enter through the main gate on Nguyen Van Cu St and walk straight into the yard. The flagpole is at the far end, between buildings B and A.",
     sign: `See you there! — ${FULL_NAME}`,
   },
 };
