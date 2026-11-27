@@ -182,6 +182,25 @@
   @media (prefers-reduced-motion: reduce) { .spot::before, .spot::after, .pin { animation: none; } .spot::before, .spot::after { display: none; } }
   .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
 
+  .rsvp { display: grid; grid-template-columns: 1fr auto; gap: 14px 24px; align-items: center; }
+  .rsvp h2 { margin: 0 0 4px; }
+  .rsvp p { margin: 0; color: var(--muted); }
+  .rsvp .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rsvp .choice[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .rsvp .choice.no[aria-pressed="true"] { background: #5b6b84; border-color: #5b6b84; }
+  .rsvp .more { grid-column: 1 / -1; display: none; gap: 10px; }
+  .rsvp .more.on { display: grid; }
+  .rsvp input, .rsvp textarea { font: inherit; font-size: 15px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: inherit; }
+  .rsvp textarea { min-height: 70px; resize: vertical; }
+  .rsvp input:focus, .rsvp textarea:focus { outline: 2px solid var(--brand-100); border-color: var(--brand-light); }
+  .rsvp .send { justify-self: start; }
+  .rsvp .done { grid-column: 1 / -1; display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--brand-50); color: var(--brand-deep); font-weight: 500; }
+  .rsvp.sent .done { display: flex; }
+  .rsvp.sent .choices, .rsvp.sent .more { display: none; }
+  .rsvp .link { font: inherit; font-size: 13px; color: var(--brand); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+  .rsvp .err { grid-column: 1 / -1; margin: 0; color: #b42318; font-size: 14px; }
+  .rsvp .err:empty { display: none; }
+  @media (max-width: 640px) { .rsvp { grid-template-columns: 1fr; } .rsvp .choices .btn { flex: 1 1 0; justify-content: center; } }
   .contact { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
   .contact p { margin: 0; color: var(--muted); }
   .contact-btns { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -279,7 +298,25 @@
       </div>
     </dl>
 
-    <section class="panel route reveal" style="--i:7" id="route">
+    <section class="panel rsvp reveal" style="--i:7" id="rsvp">
+      <div>
+        <h2 class="section-title" data-t="rsvpL"></h2>
+        <p data-t="rsvpQ"></p>
+      </div>
+      <div class="choices">
+        <button class="btn choice" id="rsvpYes" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg><span data-t="rsvpYes"></span></button>
+        <button class="btn choice no" id="rsvpNo" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="rsvpNo"></span></button>
+      </div>
+      <div class="more" id="rsvpMore">
+        <input id="rsvpName" maxlength="60" autocomplete="name">
+        <textarea id="rsvpNote" maxlength="500"></textarea>
+        <button class="btn primary send" id="rsvpSend"><span data-t="rsvpSend"></span></button>
+      </div>
+      <p class="err" id="rsvpErr"></p>
+      <div class="done"><span id="rsvpDone"></span><button class="link" id="rsvpChange" data-t="rsvpChange"></button></div>
+    </section>
+
+    <section class="panel route reveal" style="--i:8" id="route">
       <div>
         <h2 class="section-title" data-t="routeL"></h2>
         <ul class="gates" id="gates"></ul>
@@ -294,7 +331,7 @@
       </div>
     </section>
 
-    <section class="panel contact reveal" style="--i:8" id="contactBox">
+    <section class="panel contact reveal" style="--i:9" id="contactBox">
       <div>
         <h2 class="section-title" style="margin-bottom:4px" data-t="contactL"></h2>
         <p data-t="contactNote"></p>
@@ -309,7 +346,7 @@
       </div>
     </section>
 
-    <footer class="sign reveal" style="--i:9" data-t="sign"></footer>
+    <footer class="sign reveal" style="--i:10" data-t="sign"></footer>
   </div>
 </main>
 
@@ -343,6 +380,13 @@ Object.assign(TEXT.vi, {
   lang: `<b>VI</b><span>EN</span>`,
   skip: "Bỏ qua →",
   showTo: "Gửi {n}",
+  rsvpL: "Xác nhận tham dự",
+  rsvpQ: `Báo giúp ${ME} một tiếng là có đến được không nhé.`,
+  rsvpYes: "Sẽ đến", rsvpNo: "Không đến được",
+  rsvpName: "Tên của bạn", rsvpNote: "Nhắn gì đó (không bắt buộc)", rsvpSend: "Gửi xác nhận",
+  rsvpSending: "Đang gửi…", rsvpNeedName: "Điền tên giúp mình nhé.", rsvpFail: "Chưa gửi được, kiểm tra mạng rồi thử lại nhé.",
+  rsvpDoneYes: "Đã ghi nhận: sẽ đến. Hẹn gặp ở cột cờ nhé! 🎉", rsvpDoneNo: "Đã ghi nhận: không đến được. Cảm ơn đã báo nhé!",
+  rsvpChange: "Đổi câu trả lời",
   brand: `Lễ tốt nghiệp · ${SCHOOL_SHORT}`,
   whenWhere: "Thời gian & địa điểm",
   dateL: "Ngày", date: `${VI_WEEKDAYS[DAY.getUTCDay()]}, ${pad(ED)}.${pad(EM)}.${EY}`,
@@ -358,6 +402,13 @@ Object.assign(TEXT.en, {
   lang: `<span>VI</span><b>EN</b>`,
   skip: "Skip →",
   showTo: "For {n}",
+  rsvpL: "RSVP",
+  rsvpQ: "Let me know if you can make it.",
+  rsvpYes: "I'll be there", rsvpNo: "Can't make it",
+  rsvpName: "Your name", rsvpNote: "Leave a note (optional)", rsvpSend: "Send",
+  rsvpSending: "Sending…", rsvpNeedName: "Please add your name.", rsvpFail: "Couldn't send. Check your connection and try again.",
+  rsvpDoneYes: "Got it: you're coming. See you at the flagpole! 🎉", rsvpDoneNo: "Got it: you can't make it. Thanks for letting me know!",
+  rsvpChange: "Change answer",
   brand: `Graduation · ${SCHOOL_SHORT}`,
   whenWhere: "When & where",
   dateL: "Date", date: DAY.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }),
@@ -429,6 +480,66 @@ function render() {
     li.append(b, s);
     return li;
   }));
+  renderRsvp();
+}
+
+// ===== RSVP: going or not, sent to the Google Sheet behind RSVP_URL (see rsvp-apps-script.gs) =====
+// The guest is the link code (?to=duc-xxxx -> "duc"), or the name for plain links.
+// Apps Script does not answer cross-site requests readably, so we send "no-cors" and treat
+// "the request left" as sent; the answer is also kept in this browser to show it next time.
+const guestCode = () => (shortLink ? shortLink[1] : "");
+let rsvp = { answer: "", sent: false }, rsvpKey = "";
+function rsvpLoad() {
+  rsvpKey = "rsvp:" + (guestCode() || rawName || "?"); // fixed at load, even if a name is typed later
+  try { rsvp = { ...rsvp, ...JSON.parse(localStorage.getItem(rsvpKey) || "{}") }; } catch {}
+}
+function rsvpSave() { try { localStorage.setItem(rsvpKey, JSON.stringify(rsvp)); } catch {} }
+function postRsvp(data) {
+  return fetch(RSVP_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                           body: JSON.stringify({ code: guestCode(), name: rawName, lang, ...data }) });
+}
+function renderRsvp() {
+  if (!RSVP_URL) return;
+  const t = TEXT[lang];
+  document.getElementById("rsvp").classList.toggle("sent", rsvp.sent);
+  document.getElementById("rsvpYes").setAttribute("aria-pressed", rsvp.answer === "yes");
+  document.getElementById("rsvpNo").setAttribute("aria-pressed", rsvp.answer === "no");
+  document.getElementById("rsvpMore").classList.toggle("on", !!rsvp.answer && !rsvp.sent);
+  const name = document.getElementById("rsvpName");
+  name.hidden = !!rawName;
+  name.placeholder = t.rsvpName;
+  document.getElementById("rsvpNote").placeholder = t.rsvpNote;
+  document.getElementById("rsvpDone").textContent = rsvp.answer === "no" ? t.rsvpDoneNo : t.rsvpDoneYes;
+}
+function setupRsvp() {
+  if (!RSVP_URL) { document.getElementById("rsvp").remove(); return; }
+  rsvpLoad();
+  const err = document.getElementById("rsvpErr");
+  const choose = answer => () => { rsvp.answer = answer; err.textContent = ""; renderRsvp(); };
+  document.getElementById("rsvpYes").onclick = choose("yes");
+  document.getElementById("rsvpNo").onclick = choose("no");
+  document.getElementById("rsvpChange").onclick = () => { rsvp.sent = false; rsvpSave(); renderRsvp(); };
+  const send = document.getElementById("rsvpSend");
+  send.onclick = async () => {
+    const t = TEXT[lang];
+    if (!rawName) {
+      const typed = document.getElementById("rsvpName").value.trim().slice(0, 40);
+      if (!typed) { err.textContent = t.rsvpNeedName; return; }
+      rawName = typed;
+    }
+    send.disabled = true; send.firstElementChild.textContent = t.rsvpSending; err.textContent = "";
+    try {
+      await postRsvp({ type: "rsvp", answer: rsvp.answer, note: document.getElementById("rsvpNote").value.trim() });
+      rsvp.sent = true; rsvpSave();
+    } catch { err.textContent = t.rsvpFail; }
+    send.disabled = false; send.firstElementChild.textContent = t.rsvpSend;
+    renderRsvp();
+  };
+}
+// One line per opening in the "Lượt mở" sheet, only for invites with a name (so the host's own tests stay out)
+function trackOpen() {
+  if (!RSVP_URL || !rawName) return;
+  postRsvp({ type: "open", ua: navigator.userAgent }).catch(() => {});
 }
 
 // ===== Links =====
@@ -584,7 +695,7 @@ async function goStage3() {
   show.remove();
 }
 
-loadGuest().then(goStage2);
+loadGuest().then(() => { setupRsvp(); trackOpen(); goStage2(); });
 </script>
 </body>
 </html>

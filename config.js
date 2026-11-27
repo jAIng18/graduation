@@ -30,6 +30,11 @@ const MAP_IMAGE = "campus-map.jpg";
 // left/top = tâm vòng, tính theo % chiều ngang/dọc của ảnh. size = đường kính, theo % chiều ngang ảnh.
 const PIN = { left: "61.4%", top: "53.3%", size: "11%" }; // cột cờ, giữa dãy B và dãy A
 
+// ----- Xác nhận tham dự -----
+// URL Ứng dụng web của Google Apps Script (đuôi /exec), cách lấy xem đầu file rsvp-apps-script.gs.
+// Câu trả lời và lượt mở thiệp được ghi vào Google Sheet đó. Để "" thì ẩn mục xác nhận.
+const RSVP_URL = "https://script.google.com/macros/s/AKfycbzn__0B3GZfvJcIs8xCI0LzYpsGNVToXzdbYIFWBFG-lKQpo0T-777JBtoZlNbEB6nb/exec";
+
 // ----- Lời mời mặc định theo nhóm khách -----
 // Link ?to=Minh&g=family dùng nhóm "family". make.html lấy các nhóm này làm mẫu ban đầu.
 // {n} = tên khách. Tiếng Việt đổi xưng hô theo quan hệ nên mỗi nhóm một lời riêng.
