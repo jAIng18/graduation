@@ -204,16 +204,15 @@
   .rsvp .choices.picked .choice { animation: none; opacity: .55; }
   .rsvp .choices.picked .choice[aria-pressed="true"] { opacity: 1; outline: 3px solid rgba(255, 255, 255, .85); outline-offset: 2px; }
   .rsvp .choice.no[aria-pressed="true"] { background: #fff; color: var(--brand-deep); border-color: #fff; }
-  .rsvp .more { grid-column: 1 / -1; display: none; gap: 10px; }
-  .rsvp .more.on { display: grid; }
-  .rsvp input, .rsvp textarea { font: inherit; font-size: 15px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid transparent; border-radius: 10px; background: #fff; color: var(--ink); }
-  .rsvp textarea { min-height: 70px; resize: vertical; }
-  .rsvp input:focus, .rsvp textarea:focus { outline: 3px solid rgba(240, 180, 41, .7); }
-  .rsvp .send { justify-self: start; background: var(--gold); border-color: var(--gold); color: #3d2a00; box-shadow: 0 8px 20px -8px rgba(240, 180, 41, .8); }
-  .rsvp .send:hover { background: #ffc94a; border-color: #ffc94a; }
+  .rsvp .who { grid-column: 1 / -1; font: inherit; font-size: 15px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid transparent; border-radius: 10px; background: #fff; color: var(--ink); }
+  .rsvp .who[hidden] { display: none; }
+  .rsvp .who:focus { outline: 3px solid rgba(240, 180, 41, .7); }
+  .rsvp.busy .choice { cursor: progress; }
+  .rsvp.busy .choice[aria-pressed="true"] { animation: wait 1s ease-in-out infinite; }
+  @keyframes wait { 50% { opacity: .6; } }
   .rsvp .done { grid-column: 1 / -1; display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .3); color: #fff; font-weight: 600; }
   .rsvp.sent .done { display: flex; }
-  .rsvp.sent .choices, .rsvp.sent .more { display: none; }
+  .rsvp.sent .choices, .rsvp.sent .who { display: none; }
   .rsvp .link { font: inherit; font-size: 13px; color: #fff; opacity: .9; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
   .rsvp .err { grid-column: 1 / -1; margin: 0; color: #ffd6d1; font-size: 14px; font-weight: 500; }
   .rsvp .err:empty { display: none; }
@@ -325,11 +324,7 @@
         <button class="btn choice yes" id="rsvpYes" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg><span data-t="rsvpYes"></span></button>
         <button class="btn choice no" id="rsvpNo" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="rsvpNo"></span></button>
       </div>
-      <div class="more" id="rsvpMore">
-        <input id="rsvpName" maxlength="60" autocomplete="name">
-        <textarea id="rsvpNote" maxlength="500"></textarea>
-        <button class="btn primary send" id="rsvpSend"><span data-t="rsvpSend"></span></button>
-      </div>
+      <input class="who" id="rsvpName" maxlength="60" autocomplete="name">
       <p class="err" id="rsvpErr"></p>
       <div class="done"><span id="rsvpDone"></span><button class="link" id="rsvpChange" data-t="rsvpChange"></button></div>
     </section>
@@ -401,8 +396,8 @@ Object.assign(TEXT.vi, {
   rsvpL: "Xác nhận tham dự",
   rsvpQ: `Báo giúp ${ME} một tiếng là có đến được không nhé.`,
   rsvpYes: "Sẽ đến", rsvpNo: "Không đến được",
-  rsvpName: "Tên của bạn", rsvpNote: "Nhắn gì đó (không bắt buộc)", rsvpSend: "Gửi xác nhận",
-  rsvpSending: "Đang gửi…", rsvpNeedName: "Điền tên giúp mình nhé.", rsvpFail: "Chưa gửi được, kiểm tra mạng rồi thử lại nhé.",
+  rsvpName: "Tên của bạn",
+  rsvpNeedName: "Điền tên giúp mình nhé.", rsvpFail: "Chưa gửi được, kiểm tra mạng rồi thử lại nhé.",
   rsvpDoneYes: "Đã ghi nhận: sẽ đến. Hẹn gặp ở cột cờ nhé! 🎉", rsvpDoneNo: "Đã ghi nhận: không đến được. Cảm ơn đã báo nhé!",
   rsvpChange: "Đổi câu trả lời",
   brand: `Lễ tốt nghiệp · ${SCHOOL_SHORT}`,
@@ -423,8 +418,8 @@ Object.assign(TEXT.en, {
   rsvpL: "RSVP",
   rsvpQ: "Let me know if you can make it.",
   rsvpYes: "I'll be there", rsvpNo: "Can't make it",
-  rsvpName: "Your name", rsvpNote: "Leave a note (optional)", rsvpSend: "Send",
-  rsvpSending: "Sending…", rsvpNeedName: "Please add your name.", rsvpFail: "Couldn't send. Check your connection and try again.",
+  rsvpName: "Your name",
+  rsvpNeedName: "Please add your name.", rsvpFail: "Couldn't send. Check your connection and try again.",
   rsvpDoneYes: "Got it: you're coming. See you at the flagpole! 🎉", rsvpDoneNo: "Got it: you can't make it. Thanks for letting me know!",
   rsvpChange: "Change answer",
   brand: `Graduation · ${SCHOOL_SHORT}`,
@@ -523,37 +518,39 @@ function renderRsvp() {
   document.getElementById("rsvpYes").setAttribute("aria-pressed", rsvp.answer === "yes");
   document.getElementById("rsvpNo").setAttribute("aria-pressed", rsvp.answer === "no");
   document.querySelector("#rsvp .choices").classList.toggle("picked", !!rsvp.answer);
-  document.getElementById("rsvpMore").classList.toggle("on", !!rsvp.answer && !rsvp.sent);
   const name = document.getElementById("rsvpName");
-  name.hidden = !!rawName;
+  name.hidden = !!rawName;           // links made for a guest already know the name
   name.placeholder = t.rsvpName;
-  document.getElementById("rsvpNote").placeholder = t.rsvpNote;
   document.getElementById("rsvpDone").textContent = rsvp.answer === "no" ? t.rsvpDoneNo : t.rsvpDoneYes;
 }
+// One tap = answered: pressing "Sẽ đến" / "Không đến được" sends right away.
 function setupRsvp() {
   if (!RSVP_URL) { document.getElementById("rsvp").remove(); return; }
   rsvpLoad();
   const err = document.getElementById("rsvpErr");
-  const choose = answer => () => { rsvp.answer = answer; err.textContent = ""; renderRsvp(); };
-  document.getElementById("rsvpYes").onclick = choose("yes");
-  document.getElementById("rsvpNo").onclick = choose("no");
-  document.getElementById("rsvpChange").onclick = () => { rsvp.sent = false; rsvpSave(); renderRsvp(); };
-  const send = document.getElementById("rsvpSend");
-  send.onclick = async () => {
+  const buttons = [document.getElementById("rsvpYes"), document.getElementById("rsvpNo")];
+  const answer = value => async () => {
     const t = TEXT[lang];
     if (!rawName) {
       const typed = document.getElementById("rsvpName").value.trim().slice(0, 40);
-      if (!typed) { err.textContent = t.rsvpNeedName; return; }
+      if (!typed) { err.textContent = t.rsvpNeedName; document.getElementById("rsvpName").focus(); return; }
       rawName = typed;
     }
-    send.disabled = true; send.firstElementChild.textContent = t.rsvpSending; err.textContent = "";
+    rsvp.answer = value; err.textContent = "";
+    buttons.forEach(b => b.disabled = true);
+    document.getElementById("rsvp").classList.add("busy");
+    renderRsvp();
     try {
-      await postRsvp({ type: "rsvp", answer: rsvp.answer, note: document.getElementById("rsvpNote").value.trim() });
+      await postRsvp({ type: "rsvp", answer: value });
       rsvp.sent = true; rsvpSave();
     } catch { err.textContent = t.rsvpFail; }
-    send.disabled = false; send.firstElementChild.textContent = t.rsvpSend;
+    buttons.forEach(b => b.disabled = false);
+    document.getElementById("rsvp").classList.remove("busy");
     renderRsvp();
   };
+  buttons[0].onclick = answer("yes");
+  buttons[1].onclick = answer("no");
+  document.getElementById("rsvpChange").onclick = () => { rsvp.sent = false; rsvpSave(); renderRsvp(); };
 }
 // One line per opening in the "Lượt mở" sheet, only for invites with a name (so the host's own tests stay out)
 function trackOpen() {
