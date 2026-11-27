@@ -182,24 +182,42 @@
   @media (prefers-reduced-motion: reduce) { .spot::before, .spot::after, .pin { animation: none; } .spot::before, .spot::after { display: none; } }
   .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
 
-  .rsvp { display: grid; grid-template-columns: 1fr auto; gap: 14px 24px; align-items: center; }
-  .rsvp h2 { margin: 0 0 4px; }
-  .rsvp p { margin: 0; color: var(--muted); }
+  /* RSVP stands out: brand-blue card with a gold call to action */
+  .rsvp {
+    display: grid; grid-template-columns: 1fr auto; gap: 14px 24px; align-items: center; position: relative; overflow: hidden;
+    color: #fff; border: 0; background: linear-gradient(120deg, var(--brand-deep), var(--brand) 55%, var(--brand-light));
+    box-shadow: 0 18px 40px -18px rgba(15, 45, 99, .65);
+  }
+  .rsvp::before { content: ""; position: absolute; right: -60px; top: -80px; width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(240, 180, 41, .35), transparent 65%); pointer-events: none; }
+  .rsvp > * { position: relative; }
+  .rsvp h2 { margin: 0 0 4px; color: var(--gold); }
+  .rsvp p { margin: 0; color: rgba(255, 255, 255, .9); font-size: 16px; font-weight: 500; }
   .rsvp .choices { display: flex; flex-wrap: wrap; gap: 10px; }
-  .rsvp .choice[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
-  .rsvp .choice.no[aria-pressed="true"] { background: #5b6b84; border-color: #5b6b84; }
+  .rsvp .choice { padding: 11px 18px; font-size: 15px; }
+  .rsvp .choice.yes { background: var(--gold); border-color: var(--gold); color: #3d2a00; box-shadow: 0 8px 20px -8px rgba(240, 180, 41, .8); animation: nudge 2.6s ease-in-out 1.5s infinite; }
+  .rsvp .choice.yes:hover { background: #ffc94a; }
+  .rsvp .choice.no { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .45); color: #fff; }
+  .rsvp .choice.no:hover { background: rgba(255, 255, 255, .18); }
+  @keyframes nudge { 0%, 80%, 100% { transform: none; } 85% { transform: translateY(-3px) scale(1.04); } 92% { transform: translateY(0) scale(1); } }
+  /* once one is picked: the picked one is solid, the other fades back */
+  .rsvp .choices.picked .choice { animation: none; opacity: .55; }
+  .rsvp .choices.picked .choice[aria-pressed="true"] { opacity: 1; outline: 3px solid rgba(255, 255, 255, .85); outline-offset: 2px; }
+  .rsvp .choice.no[aria-pressed="true"] { background: #fff; color: var(--brand-deep); border-color: #fff; }
   .rsvp .more { grid-column: 1 / -1; display: none; gap: 10px; }
   .rsvp .more.on { display: grid; }
-  .rsvp input, .rsvp textarea { font: inherit; font-size: 15px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: inherit; }
+  .rsvp input, .rsvp textarea { font: inherit; font-size: 15px; width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid transparent; border-radius: 10px; background: #fff; color: var(--ink); }
   .rsvp textarea { min-height: 70px; resize: vertical; }
-  .rsvp input:focus, .rsvp textarea:focus { outline: 2px solid var(--brand-100); border-color: var(--brand-light); }
-  .rsvp .send { justify-self: start; }
-  .rsvp .done { grid-column: 1 / -1; display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 14px; border-radius: 12px; background: var(--brand-50); color: var(--brand-deep); font-weight: 500; }
+  .rsvp input:focus, .rsvp textarea:focus { outline: 3px solid rgba(240, 180, 41, .7); }
+  .rsvp .send { justify-self: start; background: var(--gold); border-color: var(--gold); color: #3d2a00; box-shadow: 0 8px 20px -8px rgba(240, 180, 41, .8); }
+  .rsvp .send:hover { background: #ffc94a; border-color: #ffc94a; }
+  .rsvp .done { grid-column: 1 / -1; display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .3); color: #fff; font-weight: 600; }
   .rsvp.sent .done { display: flex; }
   .rsvp.sent .choices, .rsvp.sent .more { display: none; }
-  .rsvp .link { font: inherit; font-size: 13px; color: var(--brand); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
-  .rsvp .err { grid-column: 1 / -1; margin: 0; color: #b42318; font-size: 14px; }
+  .rsvp .link { font: inherit; font-size: 13px; color: #fff; opacity: .9; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+  .rsvp .err { grid-column: 1 / -1; margin: 0; color: #ffd6d1; font-size: 14px; font-weight: 500; }
   .rsvp .err:empty { display: none; }
+  @media (prefers-reduced-motion: reduce) { .rsvp .choice.yes { animation: none; } }
   @media (max-width: 640px) { .rsvp { grid-template-columns: 1fr; } .rsvp .choices .btn { flex: 1 1 0; justify-content: center; } }
   .contact { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
   .contact p { margin: 0; color: var(--muted); }
@@ -304,7 +322,7 @@
         <p data-t="rsvpQ"></p>
       </div>
       <div class="choices">
-        <button class="btn choice" id="rsvpYes" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg><span data-t="rsvpYes"></span></button>
+        <button class="btn choice yes" id="rsvpYes" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg><span data-t="rsvpYes"></span></button>
         <button class="btn choice no" id="rsvpNo" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="rsvpNo"></span></button>
       </div>
       <div class="more" id="rsvpMore">
@@ -504,6 +522,7 @@ function renderRsvp() {
   document.getElementById("rsvp").classList.toggle("sent", rsvp.sent);
   document.getElementById("rsvpYes").setAttribute("aria-pressed", rsvp.answer === "yes");
   document.getElementById("rsvpNo").setAttribute("aria-pressed", rsvp.answer === "no");
+  document.querySelector("#rsvp .choices").classList.toggle("picked", !!rsvp.answer);
   document.getElementById("rsvpMore").classList.toggle("on", !!rsvp.answer && !rsvp.sent);
   const name = document.getElementById("rsvpName");
   name.hidden = !!rawName;
