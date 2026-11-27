@@ -16,17 +16,18 @@ const SCHOOL_SHORT = "HCMUS";          // hiện ở thanh trên cùng
 // ----- Khi nào (giờ Việt Nam) -----
 // Thứ, ngày hiển thị, đếm ngược và file lịch (Google Calendar, .ics) đều tự tính từ 3 dòng này.
 const EVENT_DATE = "2026-12-06";       // năm-tháng-ngày
-const EVENT_START = "15:30";
-const EVENT_END = "17:00";
+const EVENT_START = "16:00";
+const EVENT_END = "17:30";
 
 // ----- Ở đâu -----
 // HCMUS có 2 cơ sở: 227 Nguyễn Văn Cừ, Phường 4, Quận 5 và Khu đô thị ĐHQG, Linh Trung, Thủ Đức.
 const MAPS_QUERY = "Trường Đại học Khoa học Tự nhiên, 227 Nguyễn Văn Cừ, TP.HCM"; // gõ vào Google Maps ra đúng chỗ
 const CALENDAR_PLACE = "Trường ĐH Khoa học Tự nhiên, 227 Nguyễn Văn Cừ, TP.HCM";
 // Bản đồ khuôn viên (tuỳ chọn): bỏ ảnh vào thư mục rồi ghi tên file, vd "campus-map.jpg". Để "" thì ẩn.
-const MAP_IMAGE = "";
-// Ghim trên bản đồ: left/top = vị trí tính theo % chiều ngang/dọc của ảnh.
-const PIN = { label: "[Chỗ hẹn]", left: "50%", top: "50%" };
+const MAP_IMAGE = "campus-map.jpg";
+// Chỗ hẹn trên bản đồ: một vòng sáng quanh điểm đó, nhãn (TEXT.pin) hiện phía trên vòng.
+// left/top = tâm vòng, tính theo % chiều ngang/dọc của ảnh. size = đường kính, theo % chiều ngang ảnh.
+const PIN = { left: "61.4%", top: "53.3%", size: "11%" }; // cột cờ, giữa dãy B và dãy A
 
 // ----- Lời mời mặc định theo nhóm khách -----
 // Link ?to=Minh&g=family dùng nhóm "family". make.html lấy các nhóm này làm mẫu ban đầu.
@@ -65,8 +66,9 @@ const TEXT = {
     title: `Chung vui <em>ngày tốt nghiệp</em> cùng ${ME}`,
     fallback: "bạn",
     timeNote: "",                      // ghi chú nhỏ dưới giờ, vd: "Lễ của khoa bắt đầu 14:30, tới 15:30 là vừa đẹp"
-    place: "[Chỗ hẹn]<small>Cơ sở Nguyễn Văn Cừ · 227 Nguyễn Văn Cừ, TP.HCM</small>", // vd chỗ hẹn: "Trước sảnh nhà I"
-    routeL: "Đường đến [chỗ hẹn]",
+    place: "Cột cờ<small>Cơ sở Nguyễn Văn Cừ · 227 Nguyễn Văn Cừ, TP.HCM</small>", // vd chỗ hẹn: "Trước sảnh nhà I"
+    routeL: "Đường đến cột cờ",
+    pin: "Cột cờ · chỗ hẹn",          // nhãn trên bản đồ
     gates: [                           // [tên cổng, đường]. Để [] nếu không cần mục này
       ["[Cổng chính]", "[Tên đường]"],
       ["[Cổng phụ]", "[Tên đường]"],
@@ -82,8 +84,9 @@ const TEXT = {
     title: `Celebrate <em>graduation day</em> with ${ME}`,
     fallback: "friend",
     timeNote: "",
-    place: "[Meeting point]<small>Nguyen Van Cu campus · 227 Nguyen Van Cu St, HCMC</small>",
+    place: "The flagpole<small>Nguyen Van Cu campus · 227 Nguyen Van Cu St, HCMC</small>",
     routeL: "Getting there",
+    pin: "Flagpole · meet here",
     gates: [
       ["[Main gate]", "[Street]"],
       ["[Side gate]", "[Street]"],
